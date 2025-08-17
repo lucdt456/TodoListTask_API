@@ -10,4 +10,9 @@
     <ProjectReference Include="..\TodoListTask.EFCore\TodoListTask.EFCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helper\" />
+    <Folder Include="Services\Authenticate\Dto\" />
+  </ItemGroup>
+
 </Project>
