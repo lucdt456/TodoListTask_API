@@ -1,5 +1,7 @@
 ﻿using Serilog;
 using Microsoft.OpenApi.Models;
+using TodoListTask.EFCore.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddDbContext<TodoListDbContext>(options =>
+	options.UseSqlServer(builder.Configuration.GetConnectionString("TodoList"),
+		b => b.MigrationsAssembly("TodoListTask.EFCore"))); // Chỉ định nơi lưu trữ migration
 
 // Cấu hình Swagger với JWT Bearer
 builder.Services.AddSwaggerGen(c =>
@@ -39,12 +45,10 @@ builder.Services.AddSwaggerGen(c =>
 	});
 });
 
-// Cấu hình Serilog chỉ để ghi file, KHÔNG thay thế default logging
 Log.Logger = new LoggerConfiguration()
 	.ReadFrom.Configuration(builder.Configuration)
 	.CreateLogger();
 
-// Thêm Serilog vào logging providers (cùng tồn tại với default console logging)
 builder.Logging.AddSerilog(Log.Logger);
 
 var app = builder.Build();
