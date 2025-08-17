@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Models;
 using TodoListTask.EFCore.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TodoListTask.Service.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<TodoListDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("TodoList"),
-		b => b.MigrationsAssembly("TodoListTask.EFCore"))); // Chỉ định nơi lưu trữ migration
+		b => b.MigrationsAssembly("TodoListTask.EFCore")));
+
+//Đăng ký DI Service
+builder.Services.AddServices();
 
 // Cấu hình Swagger với JWT Bearer
 builder.Services.AddSwaggerGen(c =>
